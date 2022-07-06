@@ -1,21 +1,23 @@
-
-import requests
+from googleapiclient.discovery import build
 import json
 import os
-
+#import requests
 
 api_key = os.environ.get("ytapi_key")
-channel_Id = 'UC4tjY2tTltEKePusozUxtSA'
 
-url = f'https://www.googleapis.com/youtube/v3/channels?part=contentDetails,statistics&id={channel_Id}&key={api_key}'
+youtube = build('youtube', 'v3', developerKey=api_key)
 
-json_url = requests.get(url)
+channel_Id = "UCCezIgC97PvUuR4_gbFUs5g"
+#'UC4tjY2tTltEKePusozUxtSA'
+request = youtube.channels().list(
+        part='statistics',
+        id=channel_Id
+    )
 
-data = json.loads(json_url.text)
+response = request.execute()
 
-try:
-    data = data["items"][0]["statistics"]
-except:
-    data = None
+json_object = json.dumps(response, indent=4)
+print(json_object)
 
-print(data)
+#print(json_object('subscriberCounter'))
+
